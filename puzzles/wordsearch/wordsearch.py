@@ -45,10 +45,8 @@ class CLIError(Exception):
         return self.msg
 
 def parse_command_line(args):
-    '''Command line options.'''
+    '''Parse command line options.'''
 
-    print("args {}".format(args))
-    
     program_name = os.path.basename(sys.argv[0])
     program_version = "v%s" % __version__
     program_build_date = str(__updated__)
@@ -61,9 +59,6 @@ def parse_command_line(args):
   Copyright 2017 47Rooks.com. All rights reserved.
 
   Licensed under the MIT License
-
-  Distributed on an "AS IS" basis without warranties
-  or conditions of any kind, either express or implied.
 
 USAGE
 ''' % (program_shortdesc, str(__date__))
@@ -230,8 +225,8 @@ class WordSearch():
         graphemes = self._get_sorted_words_list()
         g_list = [g for sublist in list(g_ent[1] for g_ent in graphemes)
                     for g in sublist]
-        g_list = list(set(g_list)) # remove dups and reform to a list
-        print(f'graphemes to fill with {g_list}')
+        g_list = list(set(g_list)) # remove duplicates and reform to a list
+
         for i in range(self._top, self._bottom+1):
             for j in range(self._left, self._right+1):
                 sq = (i, j)
@@ -295,7 +290,6 @@ class WordSearch():
         '''Do the actual generation of the wordsearch
         '''
         graphemes = self._get_sorted_words_list()
-        print(graphemes)
 
         def get_direction(dirs_to_try):
             '''From the provided set of directions select one at random and
@@ -495,9 +489,6 @@ class WordSearch():
                         browser
         output_file_name - a file name to output the dump to
         '''
-        print(self._grid)
-        print(f'top {self._top} left {self._left} bottom {self._bottom}' +
-              f'right {self._right}')
         print('''
 <html>
  <head>
@@ -565,14 +556,12 @@ class WordSearch():
         '''
     
 def main(argv=None): # IGNORE:C0111
-    print('args before extension {}'.format(argv))
     if argv is None:
         argv = sys.argv
     else:
         sys.argv.extend(argv)
 
     args = parse_command_line(argv[1:])
-    print(f'Got the following args : {args}')
     command = args.command
     text_name = args.text
     verses = args.verses
@@ -601,11 +590,6 @@ def main(argv=None): # IGNORE:C0111
         sections = []
         [sections.append((r.st_book, r.st_ch, r.st_vs)) for r in refs ]
         word_list = get_words(*sections, work=corpus)
-        print(set(word_list))
-
-        for w in word_list:
-            print(f'{w} has {len(w)} codepoints and ' +
-                  f'{len(list(grapheme_clusters(w)))} grapheme clusters.')
 
         ws = WordSearch(set(word_list), rows, cols, directions)
         ws.dump(output_format)
