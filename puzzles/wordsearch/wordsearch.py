@@ -175,7 +175,8 @@ class WordSearch():
         
         # the actual grid
         self._grid = dict()  # tuple (row, col) as key, grapheme as value
-        
+        self._placed_words = []
+
         # Helper variables - try to get rid of these
         self._deepest_row = 0
         if directions == self.LTR:
@@ -296,7 +297,7 @@ class WordSearch():
             return it. The input set is also modified to leave only unused
             directions in the set.
             FIXME recode to use a closure and thus remove the cross talk via
-            the input var sideaffect.
+            the input var side affect.
             '''
             if len(dirs_to_try) == 0:
                 return None
@@ -463,6 +464,7 @@ class WordSearch():
                     cur_dir = get_direction(dirs_left)
                     
                 if w_placed:
+                    self._placed_words.append(g_ent[0])
                     break
                 else:       
                     starting_square = get_starting_square(starting_square)
@@ -479,8 +481,79 @@ class WordSearch():
         #      perhaps in the bottom left we place from the end of the word
         #      left and up. There may be other ways to limit growth.
         #   3. do the graphemes need canonicalization ?
+    
+    def get_grid(self, output_format='html'):
+        '''Get a string representation of the wordsearch in the chosen form.
         
+        Parameters
+        
+        output_format - 'html' an HTML table layout which may be loaded in a
+                        browser
+        '''
+        rv = '''
+<html>
+ <head>
+  <meta charset="UTF-8">
+    <style>
+    div#wordsearch { float: left; width:50%;}
+    div#wordlist {float: left; margin-left: 20px;}
+    table { width: 100%; border-collapse: collapse;}
+    td { font-size: 200%;}
+    table, th, td { border: 1px solid black; }
+    ul {list-style-type: none;}
+  </style>
+</head>
+<body>
+''' + \
+        '<div id="header">' + \
+        f'''
+<h3>Wordsearch</h3>
+'''
+        # print body including wordsearch grid and list of words
+        rv += '<div id="main">'
+        
+        # wordsearch grid
+        rv += '<div id="wordsearch">'
+        rv += '<table border="1">' 
+        for i in range(self._top, self._bottom+1):
+            rv += '<tr>'
+            for j in range(self._left, self._right+1):
+                sq = (i, j)
+                if self._grid.get(sq) is not None:
+                    rv += f'<td align="center">{self._grid.get(sq)}</td>'
+                else:
+                    rv += '<td>.</td>'
+            rv += '</tr>'
+        rv += '</table></div>'
+        
+        # print the wordlist
+        rv += '''
+<div id="wordlist">
+<h3>Words to find</h3>
+<ul>'''
+        for w in sorted(self._words):
+            rv += f'<li>{w}</li>'
+        rv += '</ul></div>'
+        
+        # print the footer
+        rv += '''
+</div>
+</div>
+</body>
+</html>
+        '''
+        return rv
+        
+    def get_word_list(self):
+        return self._placed_words
+    
     def dump(self, output_format='html', output_file_name=None):
+        if output_format == 'html':
+            print(self.get_grid(output_file_name))
+        else:
+            raise Exception(f'unsupport output format {output_format}')
+        
+    def dump_html(self, output_file_name=None):
         '''Print out the wordsearch in the chosen form.
         
         Parameters
