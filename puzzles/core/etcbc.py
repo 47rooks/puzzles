@@ -44,7 +44,7 @@ def get_words(*refs, work=Corpus.HEBREW):
         word_feature = 'g_word_utf8'
     elif work == Corpus.GREEK:
         work_home = 'greek/sblgnt'
-        word_feature = 'Unicode_no_punctuations'
+        word_feature = 'g_word'
         
     TF = Fabric(modules=[work_home], silent=True)
     api = TF.load(word_feature, silent=True)
