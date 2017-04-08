@@ -18,6 +18,7 @@ import os
 
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
+import json
 from random import randrange
 
 from bibleutils.versification import parse_refs, convert_refs, expand_refs,\
@@ -490,7 +491,8 @@ class WordSearch():
         output_format - 'html' an HTML table layout which may be loaded in a
                         browser
         '''
-        rv = '''
+        if output_format == 'html':
+            rv = '''
 <html>
  <head>
   <meta charset="UTF-8">
@@ -509,43 +511,59 @@ class WordSearch():
         f'''
 <h3>Wordsearch</h3>
 '''
-        # print body including wordsearch grid and list of words
-        rv += '<div id="main">'
+            # print body including wordsearch grid and list of words
+            rv += '<div id="main">'
         
-        # wordsearch grid
-        rv += '<div id="wordsearch">'
-        rv += '<table border="1">' 
-        for i in range(self._top, self._bottom+1):
-            rv += '<tr>'
-            for j in range(self._left, self._right+1):
-                sq = (i, j)
-                if self._grid.get(sq) is not None:
-                    rv += f'<td align="center">{self._grid.get(sq)}</td>'
-                else:
-                    rv += '<td>.</td>'
-            rv += '</tr>'
-        rv += '</table></div>'
+            # wordsearch grid
+            rv += '<div id="wordsearch">'
+            rv += '<table border="1">' 
+            for i in range(self._top, self._bottom+1):
+                rv += '<tr>'
+                for j in range(self._left, self._right+1):
+                    sq = (i, j)
+                    if self._grid.get(sq) is not None:
+                        rv += f'<td align="center">{self._grid.get(sq)}</td>'
+                    else:
+                        rv += '<td>.</td>'
+                rv += '</tr>'
+            rv += '</table></div>'
         
-        # print the wordlist
-        rv += '''
+            # print the wordlist
+            rv += '''
 <div id="wordlist">
 <h3>Words to find</h3>
 <ul>'''
-        for w in sorted(self._words):
-            rv += f'<li>{w}</li>'
-        rv += '</ul></div>'
+            for w in sorted(self._words):
+                rv += f'<li>{w}</li>'
+            rv += '</ul></div>'
         
-        # print the footer
-        rv += '''
+            # print the footer
+            rv += '''
 </div>
 </div>
 </body>
 </html>
-        '''
-        return rv
+            '''
+        elif output_format == 'json':
+            def tuple_to_str_keys(m):
+                return [{'loc': k, 'grf': v} for k, v in m.items()]
+            
+            rv = []
+            for i in range(self._top, self._bottom+1):
+                for j in range(self._left, self._right+1):
+                    sq = (i, j)
+                    if self._grid.get(sq) is not None:
+                        rv.append({'loc': [i, j], 'grf': self._grid.get(sq)})
+        return json.dumps(rv, ensure_ascii=False)
         
     def get_word_list(self):
         return self._placed_words
+    
+    def get_rows(self):
+        return abs(self._top - self._bottom) + 1
+    
+    def get_cols(self):
+        return abs(self._right - self._left) + 1
     
     def dump(self, output_format='html', output_file_name=None):
         if output_format == 'html':
@@ -678,7 +696,7 @@ if __name__ == "__main__":
     if PROFILE:
         import cProfile
         import pstats
-        profile_filename = 'puzzles.wordsearch.wordsearch_profile.txt'
+        profile_filename = 'puzzleapi.wordsearch.wordsearch_profile.txt'
         cProfile.run('main()', profile_filename)
         statsfile = open("profile_stats.txt", "wb")
         p = pstats.Stats(profile_filename, stream=statsfile)
