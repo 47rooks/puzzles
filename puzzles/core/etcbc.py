@@ -4,7 +4,7 @@ Created on Jan 18, 2017
 @author: Daniel
 '''
 
-from tf.fabric import Fabric, Locality as L, Text as T
+from tf.fabric import Fabric
 from bibleutils.versification import Identifier
 from inspect import currentframe
 import gc
