@@ -49,7 +49,6 @@ def get_words(*refs, work=Corpus.HEBREW):
         
     TF = Fabric(modules=[work_home], silent=True)
     api = TF.load(word_feature, silent=True)
-    #api.makeAvailableIn(globals())
     lex_list = []
     for ref in refs:
         verse_nodes = api.T.nodeFromSection(ref)
