@@ -57,6 +57,25 @@ class Test(unittest.TestCase):
         self.assertGreater(ws._bottom, 5, 'bottom extent too small')
         self.assertLess(ws._bottom, 9, 'bottom extent too large')
 
+    def testHebrewWordsearchMultiChapter(self):
+        refs = expand_refs(convert_refs(parse_refs('Genesis 1:5, Exodus 1:2',
+                                                   form='ETCBCH'),
+                           ReferenceFormID.ETCBCH))
+        
+        # Get the list of words from TF
+        sections = []
+        [sections.append((r.st_book, r.st_ch, r.st_vs)) for r in refs ]
+        word_list = get_words(*sections, work=Corpus.HEBREW)
+ 
+        ws = WordSearch(set(word_list), 10, 10, WordSearch.RTL)
+        ws.dump('html')
+           
+        self.assertEqual(len(ws._words), 18, 'Incorrect number of words')
+        self.assertGreater(ws._left, -10, 'left extent too small')
+        self.assertLess(ws._left, -5, 'left extent too large')
+        self.assertGreater(ws._bottom, 5, 'bottom extent too small')
+        self.assertLess(ws._bottom, 9, 'bottom extent too large')
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

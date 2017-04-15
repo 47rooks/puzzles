@@ -30,6 +30,9 @@ class __Corpus(Identifier):
 
 Corpus = __Corpus()
 
+# Package variables to hold the TF API references so they can be reused without
+# needing to reload them.
+apis = dict()
 def get_words(*refs, work=Corpus.HEBREW):
     '''
     Get a list of unique words in the specified work, book, chapter and verses.
@@ -39,27 +42,24 @@ def get_words(*refs, work=Corpus.HEBREW):
             books are string names as defined in Text-Fabric for English.
             chapter and verse are integers.
     '''
-    
     if work == Corpus.HEBREW:
         work_home = 'hebrew/etcbc4c'
         word_feature = 'g_word_utf8'
+        lang = 'la'
     elif work == Corpus.GREEK:
         work_home = 'greek/sblgnt'
         word_feature = 'g_word'
+        lang = 'en'
         
-    TF = Fabric(modules=[work_home], silent=True)
-    api = TF.load(word_feature, silent=True)
+    if apis.get(work) is None:
+        TF = Fabric(modules=[work_home], silent=True)
+        apis[work] = TF.load(word_feature, silent=True)
+        
+    api = apis[work]
     lex_list = []
     for ref in refs:
-        verse_nodes = api.T.nodeFromSection(ref)
+        verse_nodes = api.T.nodeFromSection(ref, lang=lang)
         slots = api.L.d(verse_nodes, 'word')
         lex_list.extend([api.Fs(word_feature).v(s) for s in slots])
-        
-    # GC the TF layer
-    TF = None
-    api = None
-    gc.collect(0)
-    gc.collect(1)
-    gc.collect(2)
     
     return lex_list

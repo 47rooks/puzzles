@@ -544,6 +544,7 @@ class WordSearch():
 </body>
 </html>
             '''
+            return rv
         elif output_format == 'json':
             def tuple_to_str_keys(m):
                 return [{'loc': k, 'grf': v} for k, v in m.items()]
@@ -554,7 +555,7 @@ class WordSearch():
                     sq = (i, j)
                     if self._grid.get(sq) is not None:
                         rv.append({'loc': [i, j], 'grf': self._grid.get(sq)})
-        return json.dumps(rv, ensure_ascii=False)
+            return json.dumps(rv, ensure_ascii=False)
         
     def get_word_list(self):
         return self._placed_words
@@ -674,6 +675,7 @@ def main(argv=None): # IGNORE:C0111
         elif text_name == 'ETCBCH':
             refs = expand_refs(convert_refs(parse_refs(verses, form='ETCBCH'),
                                             ReferenceFormID.ETCBCH))
+            #refs = expand_refs(parse_refs(verses, form='ETCBCH'))
             corpus = Corpus.HEBREW
             directions = WordSearch.RTL
 
