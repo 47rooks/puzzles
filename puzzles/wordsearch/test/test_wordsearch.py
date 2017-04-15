@@ -70,11 +70,11 @@ class Test(unittest.TestCase):
         ws = WordSearch(set(word_list), 10, 10, WordSearch.RTL)
         ws.dump('html')
            
-        self.assertEqual(len(ws._words), 18, 'Incorrect number of words')
+        self.assertEqual(len(ws._words), 23, 'Incorrect number of words')
         self.assertGreater(ws._left, -10, 'left extent too small')
         self.assertLess(ws._left, -5, 'left extent too large')
         self.assertGreater(ws._bottom, 5, 'bottom extent too small')
-        self.assertLess(ws._bottom, 9, 'bottom extent too large')
+        self.assertLess(ws._bottom, 10, 'bottom extent too large')
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
