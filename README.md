@@ -1,2 +1,4 @@
 # puzzles
-Word puzzles
+The puzzles repo contains puzzles of various kinds which are a designed to be like the puzzles I grew up doing in English. They are great for just using a language and learning as you go rather than just sitting there bashing paradigm after paradigm into your head. The point is that one uses the language in a common everyday way just like your own native language and thus build confidence and have fun with it.
+
+Thus these puzzles are about using game playing to learn and just simply having fun with languages. The algorithms are intended to be applicable to multiple languages though the most like initial languages supported will be Biblical Greek, Biblical Hebrew and English. The reason for English is that it's my native language and this will aid testing. But the intention is that other languages should be able to be plugged is as well.
