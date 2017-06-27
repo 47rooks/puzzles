@@ -13,7 +13,7 @@ The questions now are different:
   1. Can the client do this much processing to layout a whole wordsearch grid ?
   2. Can TF which has no markup form work in this way also ? Does one have to build an intermediary to convert the rawer simpler format of TF data into markup only to have the client pull it apart ?
 
-## Requirements
+## Basic Considerations
 The basic requirement of the word games is usually a list of words. It is usual to ensure that there are no duplicates. There are a number of ways this list of words may initially be chosen. In the current wordsearch the word lists are drawn from Greek or Hebrew bible verse searches. Another way would be to cut and paste from a block of text. Additional constraints on choosing the words might run to choosing only the verbs, or the proper names or some such thing. For example, one might do a wordsearch based on the names in the Matthean genealogy.
 
 Crosswords introduce an additional requirement, that of a clue. The simplest possible clue would be a gloss in the user's native language. More complex would be clues as definitions or questions in the native language. The most difficult would be clues in the puzzle language, say for example in Biblical Greek when the crossword is in BG.
@@ -31,3 +31,40 @@ A client might get a markup fragment from a source and it might include many dif
 In languages such as BH and BG there is considerable use of diacritic marks, BH in particular. Now the thing that is a single graphical unit, what a person would think of as a letter, that is a letter plus its attendent diacritic mark, is not a single Unicode codepoint but a number of them. Most puzzles need at various points to know the number of graphical units for display, for example to correctly allocate spaces in a wordsearch. Now it the BH text though were consonantal rather than including vowels and other markings, then the number of Unicode codepoint per graphical unit is fewer. There are libraries to find this sort of thing out but the point of mentioning it is this. If the puzzle game is constructed entirely on a server then the client needs to express to the server a desire to have either consonantal or vocalized text. If however the client does it then a good deal more work is required on the client but the server does not need to provide so many options; it just provides more data.
 
 Currently graphical units are determined by use of the Python uniseg library. This has threading issues and thus needs to be tweaked to worked on a server. In a client major architecture it would have to be recoded in JS.
+
+## Requirements
+In consideration of the above the following basic requirements may be derived.
+
+### Highly Desirable
+- A way to obtain a list of words by querying a text for
+    - specific passages, identified for example by work, book, chapter, verse
+
+    - by various features of the words including
+
+      - part of speech
+      - gender
+      - number
+
+      These features might be queried in combination. Other subcategories might also be of interest including
+
+      - names of places
+      - names of people
+
+- For Hebrew, a way to obtain words with or without vowel pointing.
+
+- For Greek and Hebrew, a way to obtain the words with and without diacritic marks.
+
+- A way to obtain glosses in a translation language
+
+- A way to obtain definitions from a lexicon
+
+- A way to obtain the lexical form of words
+
+### Required
+Failing the ability to obtain any of the above in a compact form, it will be necessary to be able to obtain a document containing this information embedded within markup which the client can then extract the same data from.
+
+### Caveats
+It is understood of course that some texts may not offer all the features above. For example the names of places may not be available in a text. In such cases it would useful to know that the feature does not exist.
+
+### Response format
+The response can be a simple JSON list where each element is a simple word, or a object containing the word, the lexical entry, the gloss or the definition. Some similar alternative of course could be used. Whatever the form of the response the features requested in the request should be identified by the same name in the response.
