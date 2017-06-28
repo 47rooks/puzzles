@@ -67,4 +67,4 @@ Failing the ability to obtain any of the above in a compact form, it will be nec
 It is understood of course that some texts may not offer all the features above. For example the names of places may not be available in a text. In such cases it would useful to know that the feature does not exist.
 
 ### Response format
-The response can be a simple JSON list where each element is a simple word, or a object containing the word, the lexical entry, the gloss or the definition. Some similar alternative of course could be used. Whatever the form of the response the features requested in the request should be identified by the same name in the response.
+The response can be a simple JSON list where each element is a simple word, or an object containing the word, the lexical entry, the gloss or the definition. Some similar alternative of course could be used. Whatever the form of the response the features requested in the request should be identified by the same name in the response.
