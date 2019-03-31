@@ -27,7 +27,7 @@ class Test(unittest.TestCase):
         word_list = get_words(*sections, work=Corpus.GREEK)
 
         ws = WordSearch(set(word_list), 10, 10, WordSearch.LTR)
-        ws.dump('html')
+        ws.dump(output_file_name='ws.html')
         
         # Verify results
         # Due to randomization of direction in the layout it is impossible to

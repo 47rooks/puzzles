@@ -567,8 +567,9 @@ class WordSearch():
         return abs(self._right - self._left) + 1
     
     def dump(self, output_format='html', output_file_name=None):
-        if output_format == 'html':
-            print(self.get_grid(output_file_name))
+        if output_format == 'html' and output_file_name is not None:
+            with open(output_file_name, mode='w', encoding='utf-8') as f:
+                f.write(self.get_grid(output_format))
         else:
             raise Exception(f'unsupport output format {output_format}')
         

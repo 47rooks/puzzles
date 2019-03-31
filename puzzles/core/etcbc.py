@@ -50,10 +50,11 @@ def get_words(*refs, work=Corpus.HEBREW):
         work_home = 'greek/sblgnt'
         word_feature = 'g_word'
         lang = 'en'
-        
+    data_loc = r'D:\UserData\Daniel\github\text-fabric-data20190320'
     if apis.get(work) is None:
-        TF = Fabric(modules=[work_home], silent=True)
-        apis[work] = TF.load(word_feature, silent=True)
+        TF = Fabric(locations=[data_loc],
+                    modules=[work_home], silent=True)
+        apis[work] = TF.load(word_feature, silent=False)
         
     api = apis[work]
     lex_list = []
