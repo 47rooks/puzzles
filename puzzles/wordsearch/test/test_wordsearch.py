@@ -27,7 +27,7 @@ class Test(unittest.TestCase):
         word_list = get_words(*sections, work=Corpus.GREEK)
 
         ws = WordSearch(set(word_list), 10, 10, WordSearch.LTR)
-        ws.dump(output_file_name='ws.html')
+        ws.dump(output_file_name='greekWS.html')
         
         # Verify results
         # Due to randomization of direction in the layout it is impossible to
@@ -49,7 +49,7 @@ class Test(unittest.TestCase):
         word_list = get_words(*sections, work=Corpus.HEBREW)
  
         ws = WordSearch(set(word_list), 10, 10, WordSearch.RTL)
-        ws.dump('html')
+        ws.dump(output_file_name='hebrewWS.html')
            
         self.assertEqual(len(ws._words), 18, 'Incorrect number of words')
         self.assertGreater(ws._left, -10, 'left extent too small')
@@ -68,7 +68,7 @@ class Test(unittest.TestCase):
         word_list = get_words(*sections, work=Corpus.HEBREW)
  
         ws = WordSearch(set(word_list), 10, 10, WordSearch.RTL)
-        ws.dump('html')
+        ws.dump(output_file_name='hebrewMultiChWS.html')
            
         self.assertEqual(len(ws._words), 23, 'Incorrect number of words')
         self.assertGreater(ws._left, -10, 'left extent too small')
