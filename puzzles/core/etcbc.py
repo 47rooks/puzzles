@@ -50,7 +50,7 @@ def get_words(*refs, work=Corpus.HEBREW):
         work_home = 'greek/sblgnt'
         word_feature = 'g_word'
         lang = 'en'
-    data_loc = r'D:\UserData\Daniel\github\text-fabric-data20190320'
+    data_loc = r'/tmp/tf-data'
     if apis.get(work) is None:
         TF = Fabric(locations=[data_loc],
                     modules=[work_home], silent=True)
